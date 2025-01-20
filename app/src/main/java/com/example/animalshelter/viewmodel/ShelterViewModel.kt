@@ -6,16 +6,20 @@ import androidx.lifecycle.viewModelScope
 import com.example.animalshelter.api.AnimalShelterService
 import com.example.animalshelter.api.RetrofitClient
 import com.example.animalshelter.model.AnimalShelter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.Dispatchers
 
 class ShelterViewModel : ViewModel() {
-    private val animalShelterService = RetrofitClient.instance.create(AnimalShelterService::class.java)
+    private val animalShelterService =
+        RetrofitClient.instance.create(AnimalShelterService::class.java)
 
     private val _shelters = MutableStateFlow<List<AnimalShelter>>(emptyList())
     val shelters: StateFlow<List<AnimalShelter>> get() = _shelters
+
+    private val _shelter = MutableStateFlow<AnimalShelter?>(null)
+    val shelter: StateFlow<AnimalShelter?> get() = _shelter
 
     fun fetchShelters() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -24,6 +28,18 @@ class ShelterViewModel : ViewModel() {
                 _shelters.value = fetchedShelters
             } catch (e: Exception) {
                 Log.e("ShelterViewModel", "Failed to fetch shelters", e)
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun fetchShelterById(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val fetchedShelter = animalShelterService.getAnimalShelterById(id)
+                _shelter.value = fetchedShelter
+            } catch (e: Exception) {
+                Log.e("ShelterViewModel", "Failed to fetch shelter by id: $id", e)
                 e.printStackTrace()
             }
         }
