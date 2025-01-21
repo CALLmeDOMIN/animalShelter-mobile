@@ -25,6 +25,7 @@ import androidx.compose.ui.window.Dialog
 fun CustomDialog(
     title: String,
     inputFields: List<Triple<String, (String) -> Unit, String?>>,
+    additionalContent: @Composable (() -> Unit)? = null,
     onDismissRequest: () -> Unit,
     onConfirm: () -> Unit,
     isConfirmButtonEnabled: Boolean
@@ -61,6 +62,9 @@ fun CustomDialog(
                         )
                     }
                 }
+            }
+            additionalContent?.let {
+                it()
             }
             Row(
                 modifier = Modifier

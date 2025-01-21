@@ -1,8 +1,11 @@
 package com.example.animalshelter.api
 
+import com.example.animalshelter.model.AddAnimalShelterRequest
 import com.example.animalshelter.model.AnimalShelter
 import com.example.animalshelter.model.ShelterSummary
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface AnimalShelterService {
@@ -11,4 +14,7 @@ interface AnimalShelterService {
 
     @GET("animalshelter/{id}")
     suspend fun getAnimalShelterById(@Path("id") id: Long): AnimalShelter
+
+    @POST("animalshelter")
+    suspend fun addAnimalShelter(@Body request: AddAnimalShelterRequest): AnimalShelter
 }

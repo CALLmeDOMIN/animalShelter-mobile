@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.animalshelter.api.AnimalShelterService
 import com.example.animalshelter.api.RetrofitClient
+import com.example.animalshelter.model.AddAnimalShelterRequest
+import com.example.animalshelter.model.Animal
 import com.example.animalshelter.model.AnimalShelter
 import com.example.animalshelter.model.ShelterSummary
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +45,28 @@ class ShelterViewModel : ViewModel() {
                 Log.e("ShelterViewModel", "Failed to fetch shelter by id: $id", e)
                 e.printStackTrace()
             }
+        }
+    }
+
+    fun addShelter(name: String, capacity: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                animalShelterService.addAnimalShelter(
+                    AddAnimalShelterRequest(name, capacity)
+                )
+                fetchShelters()
+            } catch (e: Exception) {
+                Log.e("ShelterViewModel", "Failed to add shelter", e)
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun addAnimalToShelter(animal: Animal) {
+        _shelter.value?.let { currentShelter ->
+            val updatedAnimals =
+                currentShelter.animals.toMutableList().apply { add(animal) }.toSet()
+            _shelter.value = currentShelter.copy(animals = updatedAnimals)
         }
     }
 }
