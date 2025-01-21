@@ -32,4 +32,16 @@ class AnimalViewModel(private val shelterViewModel: ShelterViewModel) : ViewMode
             }
         }
     }
+
+    fun deleteAnimal(animalId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                animalService.deleteAnimal(animalId)
+                shelterViewModel.removeAnimalFromShelter(animalId)
+            } catch (e: Exception) {
+                Log.e("AnimalViewModel", "Failed to delete animal", e)
+                e.printStackTrace()
+            }
+        }
+    }
 }

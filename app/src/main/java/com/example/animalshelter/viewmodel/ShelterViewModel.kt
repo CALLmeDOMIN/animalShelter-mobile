@@ -86,4 +86,13 @@ class ShelterViewModel : ViewModel() {
             _shelter.value = currentShelter.copy(animals = updatedAnimals)
         }
     }
+
+    fun removeAnimalFromShelter(animalId: Long) {
+        _shelter.value?.let { currentShelter ->
+            val updatedAnimals =
+                currentShelter.animals.toMutableList().apply { removeIf { it.id == animalId } }
+                    .toSet()
+            _shelter.value = currentShelter.copy(animals = updatedAnimals)
+        }
+    }
 }

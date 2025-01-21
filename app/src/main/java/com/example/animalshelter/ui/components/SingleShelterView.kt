@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -41,6 +42,7 @@ fun SingleShelterView(
 
     val deletionConfirmed = remember { mutableStateOf(false) }
     val showDeleteShelterDialog = remember { mutableStateOf(false) }
+    val showDeleteAnimalDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         if (shelterId != null) {
@@ -65,13 +67,15 @@ fun SingleShelterView(
                     onClick = { showDeleteShelterDialog.value = true },
                     modifier = Modifier
                         .weight(1f)
-                        .clip(RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(6.dp))
                         .background(Color.Red)
+                        .size(24.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = "Delete Shelter",
-                        tint = Color.White
+                        tint = Color.White,
+                        modifier = Modifier.size(16.dp)
                     )
                 }
                 Spacer(Modifier.weight(1f))
