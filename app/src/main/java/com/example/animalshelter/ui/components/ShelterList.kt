@@ -7,11 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.animalshelter.model.AnimalShelter
+import com.example.animalshelter.model.ShelterSummary
 
 @Composable
 fun ShelterList(
-    shelters: List<AnimalShelter>,
-    onShelterClick: (AnimalShelter) -> Unit,
+    shelters: List<ShelterSummary>,
+    onShelterClick: (ShelterSummary) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.padding(16.dp)) {

@@ -9,11 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.animalshelter.model.AnimalShelter
+import com.example.animalshelter.model.ShelterSummary
 
 @Composable
 fun ShelterCard(
-    shelter: AnimalShelter,
+    shelter: ShelterSummary,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -22,9 +22,8 @@ fun ShelterCard(
         elevation = CardDefaults.cardElevation(4.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Name: ${shelter.name}")
-            Text(text = "Capacity: ${shelter.capacity}")
-            Text(text = "Animals: ${shelter.animals.size}")
+            Text(shelter.name)
+            Text("Rating: ${shelter.averageRating}/5")
         }
     }
 }

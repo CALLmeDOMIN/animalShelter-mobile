@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.animalshelter.api.AnimalShelterService
 import com.example.animalshelter.api.RetrofitClient
 import com.example.animalshelter.model.AnimalShelter
+import com.example.animalshelter.model.ShelterSummary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +16,8 @@ class ShelterViewModel : ViewModel() {
     private val animalShelterService =
         RetrofitClient.instance.create(AnimalShelterService::class.java)
 
-    private val _shelters = MutableStateFlow<List<AnimalShelter>>(emptyList())
-    val shelters: StateFlow<List<AnimalShelter>> get() = _shelters
+    private val _shelters = MutableStateFlow<List<ShelterSummary>>(emptyList())
+    val shelters: StateFlow<List<ShelterSummary>> get() = _shelters
 
     private val _shelter = MutableStateFlow<AnimalShelter?>(null)
     val shelter: StateFlow<AnimalShelter?> get() = _shelter
