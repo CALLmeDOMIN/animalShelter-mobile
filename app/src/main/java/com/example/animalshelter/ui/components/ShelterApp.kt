@@ -37,6 +37,12 @@ fun HomeScreen(navController: NavHostController) {
         viewModel.fetchShelters()
     }
 
+    LaunchedEffect(viewModel.refreshTrigger) {
+        viewModel.refreshTrigger.collect {
+            viewModel.fetchShelters()
+        }
+    }
+
     MainScaffold(
         "Shelters",
         navController,
@@ -85,6 +91,10 @@ fun ShelterDetails(navController: NavHostController, backStackEntry: NavBackStac
             }
         }
     ) { innerPadding ->
-        SingleShelterView(shelterId = shelterId, modifier = Modifier.padding(innerPadding))
+        SingleShelterView(
+            shelterId = shelterId,
+            modifier = Modifier.padding(innerPadding),
+            navController = navController
+        )
     }
 }

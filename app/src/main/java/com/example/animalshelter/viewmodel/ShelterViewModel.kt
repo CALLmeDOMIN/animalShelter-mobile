@@ -10,7 +10,10 @@ import com.example.animalshelter.model.Animal
 import com.example.animalshelter.model.AnimalShelter
 import com.example.animalshelter.model.ShelterSummary
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -23,6 +26,9 @@ class ShelterViewModel : ViewModel() {
 
     private val _shelter = MutableStateFlow<AnimalShelter?>(null)
     val shelter: StateFlow<AnimalShelter?> get() = _shelter
+
+    private val _refreshTrigger = MutableSharedFlow<Unit>()
+    val refreshTrigger: SharedFlow<Unit> get() = _refreshTrigger
 
     fun fetchShelters() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -51,12 +57,23 @@ class ShelterViewModel : ViewModel() {
     fun addShelter(name: String, capacity: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                animalShelterService.addAnimalShelter(
-                    AddAnimalShelterRequest(name, capacity)
-                )
-                fetchShelters()
+                animalShelterService.addAnimalShelter(AddAnimalShelterRequest(name, capacity))
+                _refreshTrigger.emit(Unit)
             } catch (e: Exception) {
                 Log.e("ShelterViewModel", "Failed to add shelter", e)
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun deleteShelter(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                animalShelterService.deleteAnimalShelter(id)
+                delay(500)
+                _refreshTrigger.emit(Unit)
+            } catch (e: Exception) {
+                Log.e("ShelterViewModel", "Failed to delete shelter", e)
                 e.printStackTrace()
             }
         }

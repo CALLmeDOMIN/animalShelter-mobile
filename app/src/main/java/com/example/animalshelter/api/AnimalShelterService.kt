@@ -4,6 +4,7 @@ import com.example.animalshelter.model.AddAnimalShelterRequest
 import com.example.animalshelter.model.AnimalShelter
 import com.example.animalshelter.model.ShelterSummary
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -17,4 +18,7 @@ interface AnimalShelterService {
 
     @POST("animalshelter")
     suspend fun addAnimalShelter(@Body request: AddAnimalShelterRequest): AnimalShelter
+
+    @DELETE("animalshelter/{id}")
+    suspend fun deleteAnimalShelter(@Path("id") id: Long)
 }
