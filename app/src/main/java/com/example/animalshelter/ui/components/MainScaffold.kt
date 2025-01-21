@@ -1,6 +1,8 @@
 package com.example.animalshelter.ui.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -10,18 +12,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
-import com.example.animalshelter.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(
+fun MainScaffold(
     title: String,
     navController: NavHostController,
     showBackButton: Boolean = false,
+    dialogContent: @Composable ((MutableState<Boolean>) -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit
 ) {
+    val showDialog = remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -29,8 +35,8 @@ fun TopBar(
                     {
                         IconButton(onClick = { navController.navigateUp() }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_back),
-                                contentDescription = "Back",
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                "Back",
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
@@ -45,6 +51,14 @@ fun TopBar(
                 }
             )
         },
+        floatingActionButton = {
+            if (dialogContent != null)
+                FloatingButton(onClick = { showDialog.value = true })
+        },
         content = content
     )
+
+    if (showDialog.value && dialogContent != null) {
+        dialogContent(showDialog)
+    }
 }
