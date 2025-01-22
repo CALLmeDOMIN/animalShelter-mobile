@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -29,6 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.animalshelter.request.RatingRequest
+import com.example.animalshelter.ui.components.dialogs.DeleteShelterDialog
+import com.example.animalshelter.ui.components.dialogs.SubmitRatingDialog
 import com.example.animalshelter.viewmodel.ShelterViewModel
 
 @Composable
@@ -42,7 +46,7 @@ fun SingleShelterView(
 
     val deletionConfirmed = remember { mutableStateOf(false) }
     val showDeleteShelterDialog = remember { mutableStateOf(false) }
-    val showDeleteAnimalDialog = remember { mutableStateOf(false) }
+    val showSubmitRatingDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         if (shelterId != null) {
@@ -89,6 +93,31 @@ fun SingleShelterView(
             }
 
             AnimalTable(it.animals)
+            RatingList(it.ratings)
+            Button(
+                onClick = { showSubmitRatingDialog.value = true },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text("Submit Rating")
+            }
+
+            if (showSubmitRatingDialog.value) {
+                SubmitRatingDialog(
+                    showDialog = showSubmitRatingDialog,
+                    onConfirm = {
+                        viewModel.addRating(
+                            RatingRequest(
+                                value = it.value,
+                                comment = it.comment,
+                                shelterId = shelterId!!
+                            )
+                        )
+                        showSubmitRatingDialog.value = false
+                    },
+                    shelterId = shelterId!!
+                )
+            }
+
             if (showDeleteShelterDialog.value) {
                 DeleteShelterDialog(
                     showDialog = showDeleteShelterDialog.value,

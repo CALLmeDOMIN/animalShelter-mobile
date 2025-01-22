@@ -1,8 +1,8 @@
 package com.example.animalshelter.api
 
-import com.example.animalshelter.model.AddAnimalShelterRequest
 import com.example.animalshelter.model.AnimalShelter
 import com.example.animalshelter.model.ShelterSummary
+import com.example.animalshelter.request.AddAnimalShelterRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

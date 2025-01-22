@@ -1,8 +1,9 @@
-package com.example.animalshelter.ui.components
+package com.example.animalshelter.ui.components.dialogs
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.example.animalshelter.ui.components.generic.CustomDialog
 
 @Composable
 fun AddShelterDialog(

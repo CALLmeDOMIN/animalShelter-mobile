@@ -4,11 +4,13 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.animalshelter.api.AnimalShelterService
+import com.example.animalshelter.api.RatingService
 import com.example.animalshelter.api.RetrofitClient
-import com.example.animalshelter.model.AddAnimalShelterRequest
 import com.example.animalshelter.model.Animal
 import com.example.animalshelter.model.AnimalShelter
 import com.example.animalshelter.model.ShelterSummary
+import com.example.animalshelter.request.AddAnimalShelterRequest
+import com.example.animalshelter.request.RatingRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,6 +22,8 @@ import kotlinx.coroutines.launch
 class ShelterViewModel : ViewModel() {
     private val animalShelterService =
         RetrofitClient.instance.create(AnimalShelterService::class.java)
+    private val ratingService =
+        RetrofitClient.instance.create(RatingService::class.java)
 
     private val _shelters = MutableStateFlow<List<ShelterSummary>>(emptyList())
     val shelters: StateFlow<List<ShelterSummary>> get() = _shelters
@@ -79,10 +83,34 @@ class ShelterViewModel : ViewModel() {
         }
     }
 
+    fun addRating(rating: RatingRequest) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                ratingService.addRating(rating)
+                fetchShelterById(rating.shelterId)
+            } catch (e: Exception) {
+                Log.e("ShelterViewModel", "Failed to add rating", e)
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun addAnimalToShelter(animal: Animal) {
         _shelter.value?.let { currentShelter ->
             val updatedAnimals =
                 currentShelter.animals.toMutableList().apply { add(animal) }.toSet()
+            _shelter.value = currentShelter.copy(animals = updatedAnimals)
+        }
+    }
+
+    fun updateAnimalInShelter(animalId: Long, updatedAnimal: Animal) {
+        _shelter.value?.let { currentShelter ->
+            val updatedAnimals =
+                currentShelter.animals.toMutableList().apply {
+                    indexOfFirst { it.id == animalId }.let { index ->
+                        if (index != -1) set(index, updatedAnimal)
+                    }
+                }.toSet()
             _shelter.value = currentShelter.copy(animals = updatedAnimals)
         }
     }

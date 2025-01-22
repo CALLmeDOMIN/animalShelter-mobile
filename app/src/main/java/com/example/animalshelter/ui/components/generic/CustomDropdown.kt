@@ -1,4 +1,4 @@
-package com.example.animalshelter.ui.components
+package com.example.animalshelter.ui.components.generic
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

@@ -10,13 +10,14 @@ import com.example.animalshelter.model.Animal
 @Composable
 fun AnimalTable(animals: Set<Animal>, modifier: Modifier = Modifier) {
     Column(modifier = modifier.padding(16.dp)) {
-        AnimalRow(null, "Name", "Species", "Age")
+        AnimalRow(null, "Name", "Species", "Age", null)
         animals.forEach { animal ->
             AnimalRow(
                 animal.id,
                 animal.name,
                 animal.species,
                 animal.age.toString(),
+                animal.condition,
                 showDeleteButton = true
             )
         }

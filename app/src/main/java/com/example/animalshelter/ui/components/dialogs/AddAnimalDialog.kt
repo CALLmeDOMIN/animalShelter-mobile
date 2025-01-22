@@ -1,4 +1,4 @@
-package com.example.animalshelter.ui.components
+package com.example.animalshelter.ui.components.dialogs
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -7,6 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.animalshelter.model.AnimalCondition
+import com.example.animalshelter.ui.components.generic.CustomDialog
+import com.example.animalshelter.ui.components.generic.CustomDropdown
 
 @Composable
 fun AddAnimalDialog(

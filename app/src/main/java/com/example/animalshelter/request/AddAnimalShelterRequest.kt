@@ -1,4 +1,4 @@
-package com.example.animalshelter.model
+package com.example.animalshelter.request
 
 data class AddAnimalShelterRequest(
     val name: String,

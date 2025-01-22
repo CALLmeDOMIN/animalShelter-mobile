@@ -1,4 +1,4 @@
-package com.example.animalshelter.ui.components
+package com.example.animalshelter.ui.components.generic
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +25,7 @@ import androidx.compose.ui.window.Dialog
 fun CustomDialog(
     title: String,
     inputFields: List<Triple<String, (String) -> Unit, String?>>,
+    initialValues: List<String>? = null,
     additionalContent: @Composable (() -> Unit)? = null,
     onDismissRequest: () -> Unit,
     onConfirm: () -> Unit,
@@ -42,7 +43,12 @@ fun CustomDialog(
         ) {
             Text(title, modifier = Modifier.padding(bottom = 8.dp))
             inputFields.forEach { (label, onValueChange, errorMessage) ->
-                val textState = remember { mutableStateOf("") }
+                val textState = remember {
+                    mutableStateOf(
+                        initialValues?.getOrNull(inputFields.indexOfFirst { it.first == label })
+                            ?: ""
+                    )
+                }
                 Column(modifier = Modifier.padding(bottom = 8.dp)) {
                     OutlinedTextField(
                         value = textState.value,

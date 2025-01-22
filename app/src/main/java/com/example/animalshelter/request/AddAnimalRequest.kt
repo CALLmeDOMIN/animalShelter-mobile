@@ -1,4 +1,6 @@
-package com.example.animalshelter.model
+package com.example.animalshelter.request
+
+import com.example.animalshelter.model.AnimalCondition
 
 data class AddAnimalRequest(
     val name: String,

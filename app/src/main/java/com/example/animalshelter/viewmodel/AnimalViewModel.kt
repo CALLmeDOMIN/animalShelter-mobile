@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.animalshelter.api.AnimalService
 import com.example.animalshelter.api.RetrofitClient
-import com.example.animalshelter.model.AddAnimalRequest
 import com.example.animalshelter.model.AnimalCondition
+import com.example.animalshelter.request.AddAnimalRequest
+import com.example.animalshelter.request.UpdateAnimalRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -28,6 +29,18 @@ class AnimalViewModel(private val shelterViewModel: ShelterViewModel) : ViewMode
                 shelterViewModel.addAnimalToShelter(newAnimal)
             } catch (e: Exception) {
                 Log.e("AnimalViewModel", "Failed to create animal", e)
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun editAnimal(animalId: Long, newAnimal: UpdateAnimalRequest) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val updatedAnimal = animalService.updateAnimal(animalId, newAnimal)
+                shelterViewModel.updateAnimalInShelter(animalId, updatedAnimal)
+            } catch (e: Exception) {
+                Log.e("AnimalViewModel", "Failed to update animal", e)
                 e.printStackTrace()
             }
         }

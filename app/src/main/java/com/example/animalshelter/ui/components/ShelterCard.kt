@@ -2,13 +2,21 @@ package com.example.animalshelter.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.animalshelter.model.ShelterSummary
 
 @Composable
@@ -22,8 +30,29 @@ fun ShelterCard(
         elevation = CardDefaults.cardElevation(4.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(shelter.name)
-            Text("Rating: ${shelter.averageRating}/5")
+            Text(
+                text = shelter.name,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Row {
+                Icon(
+                    Icons.Default.Star,
+                    contentDescription = "Rating",
+                    tint = Color.Yellow,
+                )
+                Text(
+                    "${
+                        String.format(
+                            "%.1f",
+                            shelter.averageRating
+                        )
+                    }/5"
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text("based on ${shelter.ratingAmount} ratings")
+            }
         }
     }
 }

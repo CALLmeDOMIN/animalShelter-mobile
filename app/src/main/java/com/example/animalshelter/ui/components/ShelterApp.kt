@@ -13,6 +13,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.animalshelter.ui.components.dialogs.AddAnimalDialog
+import com.example.animalshelter.ui.components.dialogs.AddShelterDialog
 import com.example.animalshelter.viewmodel.AnimalViewModel
 import com.example.animalshelter.viewmodel.AnimalViewModelFactory
 import com.example.animalshelter.viewmodel.ShelterViewModel
