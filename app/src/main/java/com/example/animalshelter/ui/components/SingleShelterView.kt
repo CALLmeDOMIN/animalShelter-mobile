@@ -33,13 +33,15 @@ import androidx.navigation.NavController
 import com.example.animalshelter.request.RatingRequest
 import com.example.animalshelter.ui.components.dialogs.DeleteShelterDialog
 import com.example.animalshelter.ui.components.dialogs.SubmitRatingDialog
+import com.example.animalshelter.viewmodel.AuthViewModel
 import com.example.animalshelter.viewmodel.ShelterViewModel
 
 @Composable
 fun SingleShelterView(
     shelterId: Long?,
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    authViewModel: AuthViewModel
 ) {
     val viewModel: ShelterViewModel = viewModel()
     val shelter = viewModel.shelter.collectAsState()
@@ -67,20 +69,22 @@ fun SingleShelterView(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Spacer(Modifier.weight(1f))
-                IconButton(
-                    onClick = { showDeleteShelterDialog.value = true },
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color.Red)
-                        .size(24.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete Shelter",
-                        tint = Color.White,
-                        modifier = Modifier.size(16.dp)
-                    )
+                if (authViewModel.isAdmin()) {
+                    IconButton(
+                        onClick = { showDeleteShelterDialog.value = true },
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(Color.Red)
+                            .size(24.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete Shelter",
+                            tint = Color.White,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
                 }
                 Spacer(Modifier.weight(1f))
                 Text(
@@ -92,7 +96,7 @@ fun SingleShelterView(
                 Text("${it.animals.size} / ${it.capacity}", Modifier.weight(2f))
             }
 
-            AnimalTable(it.animals)
+            AnimalTable(it.animals, authViewModel = authViewModel)
             RatingList(it.ratings)
             Button(
                 onClick = { showSubmitRatingDialog.value = true },

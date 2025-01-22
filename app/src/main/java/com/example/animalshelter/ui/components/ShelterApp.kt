@@ -17,21 +17,30 @@ import com.example.animalshelter.ui.components.dialogs.AddAnimalDialog
 import com.example.animalshelter.ui.components.dialogs.AddShelterDialog
 import com.example.animalshelter.viewmodel.AnimalViewModel
 import com.example.animalshelter.viewmodel.AnimalViewModelFactory
+import com.example.animalshelter.viewmodel.AuthViewModel
 import com.example.animalshelter.viewmodel.ShelterViewModel
 
 @Composable
-fun ShelterApp(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "shelters") {
-        composable("shelters") { HomeScreen(navController) }
+fun ShelterApp(navController: NavHostController, authViewModel: AuthViewModel) {
+    val role by authViewModel.role.collectAsState()
+
+    NavHost(
+        navController = navController,
+        startDestination = if (role == null) "login" else "shelters"
+    ) {
+        composable("login") {
+            LoginScreen(authViewModel, onLoginSuccess = { navController.navigate("shelters") })
+        }
+        composable("shelters") { HomeScreen(navController, authViewModel) }
         composable(
             route = "shelter/{shelterId}",
             arguments = listOf(navArgument("shelterId") { type = NavType.LongType })
-        ) { backStackEntry -> ShelterDetails(navController, backStackEntry) }
+        ) { backStackEntry -> ShelterDetails(navController, backStackEntry, authViewModel) }
     }
 }
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, authViewModel: AuthViewModel) {
     val viewModel: ShelterViewModel = viewModel()
     val shelters by viewModel.shelters.collectAsState()
 
@@ -48,6 +57,7 @@ fun HomeScreen(navController: NavHostController) {
     MainScaffold(
         "Shelters",
         navController,
+        authViewModel,
         dialogContent = { showDialog ->
             if (showDialog.value) {
                 AddShelterDialog(
@@ -71,7 +81,11 @@ fun HomeScreen(navController: NavHostController) {
 }
 
 @Composable
-fun ShelterDetails(navController: NavHostController, backStackEntry: NavBackStackEntry) {
+fun ShelterDetails(
+    navController: NavHostController,
+    backStackEntry: NavBackStackEntry,
+    authViewModel: AuthViewModel
+) {
     val shelterViewModel: ShelterViewModel = viewModel()
     val animalViewModel: AnimalViewModel =
         viewModel(factory = AnimalViewModelFactory(shelterViewModel))
@@ -80,6 +94,7 @@ fun ShelterDetails(navController: NavHostController, backStackEntry: NavBackStac
     MainScaffold(
         "Shelter Details",
         navController,
+        authViewModel,
         showBackButton = true,
         dialogContent = { showDialog ->
             if (showDialog.value) {
@@ -96,7 +111,8 @@ fun ShelterDetails(navController: NavHostController, backStackEntry: NavBackStac
         SingleShelterView(
             shelterId = shelterId,
             modifier = Modifier.padding(innerPadding),
-            navController = navController
+            navController = navController,
+            authViewModel = authViewModel
         )
     }
 }
